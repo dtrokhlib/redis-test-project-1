@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="/post" method="post">
+    <input type="text" name="repository" id="repositoryInput">
+    <button type="submit" id="submit">SUBMIT</button>
+  </form>
+
+  <div><span id="output"></span></div>
+
+  <script>
+    const btn = document.getElementById('submit');
+    const input = document.getElementById('repositoryInput')
+    const output = document.getElementById('output')
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const response = await fetch('/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          repository: input.value
+        })
+      })
+
+      const responseParsed = await response.json();
+
+      output.innerHTML =
+        `Starts for ${input.value}: ${responseParsed.stars}.<br>Request time:  ${responseParsed.time} ms`;
+
+      input.value = '';
+    })
+  </script>
+
+</body>
+
+</html>
